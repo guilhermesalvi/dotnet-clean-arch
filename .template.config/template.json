@@ -1,0 +1,28 @@
+{
+    "author": "Guilherme Salvi",
+    "classifications": [
+      "API",
+      "Microservice",
+      "Web"
+    ],
+    "identity": "CleanArch",
+    "name": "Clean Arch",
+    "shortName": "clean-arch",
+    "tags": {
+      "language": "C#",
+      "type": "project"
+    },
+    "sourceName": "CleanArch",
+    "preferNameDirectory": true,
+    "sources": [
+      {
+        "modifiers": [
+          {
+            "exclude": [
+              ".template_config/**"
+            ]
+          }
+        ]
+      }
+    ]
+  }
