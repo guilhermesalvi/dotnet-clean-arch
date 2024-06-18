@@ -1,44 +1,54 @@
-var builder = WebApplication.CreateBuilder(args);
+using System.Security.Cryptography;
+using CleanArch.Api.Extensions;
+using CleanArch.Application.Extensions;
+using CleanArch.Infrastructure.Data.Extensions;
+using Serilog;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-var app = builder.Build();
+Log.Information("Starting up");
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.UseSerilog((ctx, lc) => lc
+        .WriteTo.Console()
+        .ReadFrom.Configuration(ctx.Configuration));
+
+    // Add services to the container
+    builder.Services
+        .AddVersioning()
+        .AddNotifications()
+        .AddEndpointsApiExplorer()
+        .AddDocumentation()
+        .AddGlobalExceptionHandler()
+        .AddApplication(builder.Configuration)
+        .AddData(builder.Configuration);
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline
+    app
+        .UseNotifications()
+        .UseGlobalExceptionHandler()
+        .UseHttpsRedirection()
+        .UseRouting()
+        .UseEndpoints()
+        .UseDocumentation();
+
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+public abstract partial class Program;
