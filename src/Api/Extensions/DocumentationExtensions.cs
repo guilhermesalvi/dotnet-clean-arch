@@ -19,6 +19,7 @@ public static class DocumentationExtensions
     public static IApplicationBuilder UseDocumentation(this IApplicationBuilder app)
     {
         return app
+            .UseStaticFiles()
             .UseSwagger()
             .UseSwaggerUI(options =>
             {
@@ -31,6 +32,8 @@ public static class DocumentationExtensions
                         $"{AppName} {groupName}");
                     options.RoutePrefix = "docs";
                 }
+
+                options.InjectStylesheet("/swagger-ui/swagger-dark.css");
             });
     }
 

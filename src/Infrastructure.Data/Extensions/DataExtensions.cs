@@ -36,7 +36,7 @@ public static class DataExtensions
         var settings = configuration.Get<DataSettings>() ??
                        throw new InvalidOperationException("DataSettings is required");
 
-        services.AddDbContext<CleanArchDbContext>(options =>
+        services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(settings.ConnectionString));
 
         return services;

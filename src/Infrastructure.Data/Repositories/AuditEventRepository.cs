@@ -4,7 +4,7 @@ using CleanArch.Infrastructure.Data.Contexts;
 namespace CleanArch.Infrastructure.Data.Repositories;
 
 public class AuditEventRepository(
-    CleanArchDbContext context) : IAuditEventRepository
+    ApplicationDbContext context) : IAuditEventRepository
 {
     public Task AppendAsync(AuditEventRecord auditEventRecord, CancellationToken cancellationToken)
     {

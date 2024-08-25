@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArch.Infrastructure.Data.Contexts;
 
-public class CleanArchDbContext(
+public class ApplicationDbContext(
     DataSecurityService dataSecurityService,
-    DbContextOptions<CleanArchDbContext> options) : DbContext(options)
+    DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     public DbSet<AuditEventRecord> AuditEventRecords { get; set; }
 
@@ -22,7 +22,7 @@ public class CleanArchDbContext(
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CleanArchDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         AddProtectedPersonDataConverter(modelBuilder);
     }
