@@ -35,6 +35,7 @@ dotnet-clean-arch/
 - [Docker Compose](https://docs.docker.com/compose/)
 - [xUnit](https://xunit.net/)
 - [FluentAssertions](https://github.com/fluentassertions/fluentassertions)
+- [CentralisedPackageConverter](https://github.com/Webreaper/CentralisedPackageConverter)
 
 ## Generating Nuget package locally 📦
 
